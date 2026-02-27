@@ -14,6 +14,8 @@ public class RandomSet<T> {
     private int capacity;
     private int tableSize;
 
+    private final Random random = new Random();
+
     public RandomSet() {
         data = new Object[INITIAL_CAPACITY];
         size = 0;
