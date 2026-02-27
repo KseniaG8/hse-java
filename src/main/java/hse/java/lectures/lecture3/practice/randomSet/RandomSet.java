@@ -1,5 +1,7 @@
 package hse.java.lectures.lecture3.practice.randomSet;
 
+import java.util.Random;
+
 public class RandomSet<T> {
 
     private static final int INITIAL_CAPACITY = 16;
@@ -11,8 +13,6 @@ public class RandomSet<T> {
     private Entry<T>[] table;
     private int capacity;
     private int tableSize;
-
-    private final Random random = new Random();
 
     public RandomSet() {
         data = new Object[INITIAL_CAPACITY];
