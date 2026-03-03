@@ -93,11 +93,15 @@ jobs:
           echo "Running hard tests for tag: ${{ steps.select_tests.outputs.hard_tag }}"
           mvn -B -DfailIfNoTests=false -Dgroups='${{ steps.select_tests.outputs.hard_tag }}' test
 
-      - name: Run UI tests (module commander)
+      - name: Install Xvfb (virtual display for JavaFX/TestFX)
+        if: steps.select_tests.outputs.tag == 'commander'
+        run: sudo apt-get update && sudo apt-get install -y xvfb
+
+      - name: UI test
         if: steps.select_tests.outputs.tag == 'commander'
         run: |
           echo "Running UI tests (модуль commander)"
-          mvn -B -f commander/pom.xml -Dgroups='commander' test
+          xvfb-run -a mvn -q -f commander/pom.xml -Dgroups='commander' test
 
       - name: Comment on PR for hard tests success
         if: steps.select_tests.outputs.tag != '' && steps.hard_test.outcome == 'success'
