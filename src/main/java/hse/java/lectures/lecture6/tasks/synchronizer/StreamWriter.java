@@ -28,8 +28,20 @@ public class StreamWriter implements Runnable {
     public void run() {
         // Writer threads are intentionally infinite for the task contract.
         while (true) {
+            if (monitor.isCompleted()) {
+                break;
+            }
+
+            if (!monitor.waitingForTurn(id)) {
+                break;
+            }
+
             output.print(message);
             onTick.run();
+
+            if(!monitor.tickCompleated(id)) {
+                break;
+            }
         }
     }
 

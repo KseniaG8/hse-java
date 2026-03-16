@@ -23,10 +23,27 @@ public class Synchronizer {
      */
     public void execute() {
         // add monitor and sync
+        StreamingMonitor monitor = new StreamingMonitor(tasks.size(), ticksPerWriter);
+
+        for (StreamWriter writer : tasks) {
+            writer.attachMonitor(monitor);
+        }
+    
         for (StreamWriter writer : tasks) {
             Thread worker = new Thread(writer, "stream-writer-" + writer.getId());
             worker.setDaemon(true);
             worker.start();
+        }
+
+        try {
+            synchronized (monitor) {
+                while (!monitor.isCompleted()) {
+                    monitor.wait();
+                }
+            }
+
+        } catch(InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
     }
 
