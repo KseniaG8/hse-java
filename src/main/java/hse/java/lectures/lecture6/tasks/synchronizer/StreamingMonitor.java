@@ -18,16 +18,29 @@ public class StreamingMonitor {
             return false;
         }
 
+        if (totalTick[writerId] >= tickPerWriter) {
+            return false;
+        }
+
         while (writerId != currentId && !completed) {
             try {
                 wait();
+
+                if (completed) {
+                    return false;
+                }
+
+                if (totalTick[writerId] >= tickPerWriter) {
+                    return false;
+                }
+
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 return false;
             }
         }
 
-        if (completed) {
+        if (completed || totalTick[writerId] >= tickPerWriter) {
             return false;
         }
 
@@ -35,11 +48,11 @@ public class StreamingMonitor {
     }
 
     public synchronized boolean tickCompleated(int writerId) {
+        totalTick[writerId]++;
+        
         if (completed) {
             return false;
         }
-
-        totalTick[writerId]++;
 
         currentId = (currentId % writerCount) + 1;
 
