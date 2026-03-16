@@ -63,6 +63,6 @@ public class StreamingMonitor {
     }
 
     public synchronized boolean isCompleted() {
-        return completed
+        return completed;
     }
 }
