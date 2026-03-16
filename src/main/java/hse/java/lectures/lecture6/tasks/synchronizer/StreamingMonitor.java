@@ -25,17 +25,16 @@ public class StreamingMonitor {
         while (writerId != currentId && !completed) {
             try {
                 wait();
-
-                if (completed) {
-                    return false;
-                }
-
-                if (totalTick[writerId] >= tickPerWriter) {
-                    return false;
-                }
-
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
+                return false;
+            }
+
+            if (completed) {
+                return false;
+            }
+
+            if (totalTick[writerId] >= tickPerWriter) {
                 return false;
             }
         }
@@ -49,16 +48,10 @@ public class StreamingMonitor {
 
     public synchronized boolean tickCompleated(int writerId) {
         totalTick[writerId]++;
-        
-        if (completed) {
-            return false;
-        }
-
-        currentId = (currentId % writerCount) + 1;
 
         boolean allWriterCompleated = true;
 
-        for (int i = 1; i < writerCount; i++) {
+        for (int i = 1; i <= writerCount; i++) {
             if(totalTick[i] < tickPerWriter) {
                 allWriterCompleated = false;
                 break;
@@ -71,6 +64,10 @@ public class StreamingMonitor {
             return false;
         }
 
+        do {
+            currentId = (currentId % writerCount) + 1;
+        } while (totalTick[currentId] >= tickPerWriter);
+        
         notifyAll();
         return true;
     }
