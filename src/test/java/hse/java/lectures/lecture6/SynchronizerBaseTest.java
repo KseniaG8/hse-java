@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 
 @Tag("synchronizer")
-public class SynchronizerTest {
+public class SynchronizerBaseTest {
 
     @Test
     void testPipeline() {
