@@ -22,7 +22,7 @@ public class MemoryDauServiceTest {
 
     @Test
     void shouldCountUniqueUsersForAuthor() {
-        Clock clock = Clock.fixed(Instant.parse("2026-03-21T10:00:00Z"), ZoneOffset.UTC);
+        Clock clock = Clock.fixed(Instant.parse("2026-03-20T10:00:00Z"), ZoneOffset.UTC);
         MemoryDauService service = new MemoryDauService(clock);
 
         service.postEvent(new Event(1, 100));
@@ -42,7 +42,7 @@ public class MemoryDauServiceTest {
 
     @Test
     void shouldCountEventsFromYesterday() throws Exception {
-        Clock day1 = Clock.fixed(Instant.parse("2026-03-21T10:00:00Z"), ZoneOffset.UTC);
+        Clock day1 = Clock.fixed(Instant.parse("2026-03-20T10:00:00Z"), ZoneOffset.UTC);
         MemoryDauService service = new MemoryDauService(day1);
         service.postEvent(new Event(1, 100));
         service.postEvent(new Event(2, 100));
@@ -57,7 +57,7 @@ public class MemoryDauServiceTest {
 
     @Test
     void shouldNotMixUsersAcrossDays() throws Exception {
-        Clock day1 = Clock.fixed(Instant.parse("2026-03-21T10:00:00Z"), ZoneOffset.UTC);
+        Clock day1 = Clock.fixed(Instant.parse("2026-03-20T10:00:00Z"), ZoneOffset.UTC);
         MemoryDauService service = new MemoryDauService(day1);
         service.postEvent(new Event(1, 100));
 
@@ -72,7 +72,7 @@ public class MemoryDauServiceTest {
 
     @Test
     void shouldReturnZeroIfNoEventsYesterday() throws Exception {
-        Clock day1 = Clock.fixed(Instant.parse("2026-03-21T10:00:00Z"), ZoneOffset.UTC);
+        Clock day1 = Clock.fixed(Instant.parse("2026-03-20T10:00:00Z"), ZoneOffset.UTC);
         MemoryDauService service = new MemoryDauService(day1);
         service.postEvent(new Event(1, 100));
 
@@ -86,7 +86,7 @@ public class MemoryDauServiceTest {
 
     @Test
     void shouldHandleMultipleAuthors() throws Exception {
-        Clock day1 = Clock.fixed(Instant.parse("2026-03-21T10:00:00Z"), ZoneOffset.UTC);
+        Clock day1 = Clock.fixed(Instant.parse("2026-03-20T10:00:00Z"), ZoneOffset.UTC);
         MemoryDauService service = new MemoryDauService(day1);
         service.postEvent(new Event(1, 100));
         service.postEvent(new Event(2, 100));
